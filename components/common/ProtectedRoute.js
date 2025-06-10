@@ -1,19 +1,22 @@
-'use client';
-
+"use client"
 import { useEffect } from 'react';
 import { useRouter } from 'next/navigation';
-import { useAuth } from '../hooks/useAuth';
+import { useAuth } from '../../hooks/useAuth';
 
-export default function HomePage() {
+export default function ProtectedRoute({ children }) {
   const { user, loading } = useAuth();
   const router = useRouter();
 
   useEffect(() => {
     if (!loading) {
-      if (user) {
-        router.push('/dashboard');
-      } else {
+      if (!user) {
         router.push('/auth/login');
+        return;
+      }
+
+      if (!user.isPasswordChanged && router.pathname !== '/auth/change-password') {
+        router.push('/auth/change-password');
+        return;
       }
     }
   }, [user, loading, router]);
@@ -26,5 +29,13 @@ export default function HomePage() {
     );
   }
 
-  return null;
+  if (!user) {
+    return null;
+  }
+
+  if (!user.isPasswordChanged && router.pathname !== '/auth/change-password') {
+    return null;
+  }
+
+  return children;
 }
