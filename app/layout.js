@@ -34,7 +34,7 @@ import './globals.css';
 import AuthProvider from '../components/providers/AuthProvider';
 
 export const metadata = {
-  title: 'RBAC Dashboard',
+  title: 'Alvarium Dashboard',
   description: 'Role-based access control dashboard',
 };
 
